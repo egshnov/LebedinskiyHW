@@ -177,9 +177,10 @@ void reverse_list(list *l) {
 void print_list(list l) {
     node **tmp = &l.head;
     while (*tmp != NULL) {
-        printf("%d\n", (*tmp)->value);
+        printf("%d ", (*tmp)->value);
         tmp = &(*tmp)->next;
     }
+    printf("\n");
 }
 
 _Bool check(int i) {
