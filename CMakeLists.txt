@@ -3,4 +3,4 @@ project(LebedinskiyHW)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(LebedinskiyHW task44_4.c)
+add_executable(LebedinskiyHW "Linked list.c")
