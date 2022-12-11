@@ -41,13 +41,20 @@ list copy_list(list *l) {
 void insert(list *l, int d, int ind) {
     dnode *new = init_dnode(d);
     dnode **p = &l->head; //указатель на указатель на голову
+    dnode *prev = NULL;
     for (int i = 0; i < ind; i++) {
+        if (i != ind - 2) {
+            prev = (*p);
+        }
         p = &((*p)->next);
     }
-    new->next = *p;
-    new->previous = (*p != NULL ? (*p)->previous : NULL);
+    new->next = (*p);
+    if ((*p) != NULL) {
+        printf("NOT\n");
+        prev = (*p)->previous;
+    }
+    new->previous = prev;
     *p = new;
-    (*p)->previous = new->previous;
 }
 
 void print_list(list l) {
@@ -62,10 +69,10 @@ void print_list(list l) {
 void back_print(list l) {
     dnode *p = l.head;
     while (p->next != NULL) {
-        printf("next\n");
+        //printf("next\n");
         p = p->next;
     }
-    while (p->previous != NULL) {
+    while (p != NULL) {
         printf("%d ", p->value);
         p = p->previous;
     }
@@ -77,6 +84,8 @@ int main() {
     for (int i = 0; i < 15; i++) {
         insert(&l, i, i);
     }
+    print_list(l);
+    insert(&l, 100000, 5);
     print_list(l);
     back_print(l);
 }
