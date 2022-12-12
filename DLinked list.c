@@ -25,33 +25,34 @@ list init_list() {
     return *new_list;
 }
 
-void insert(list *l, int d, int ind) {
-    dnode *new = init_dnode(d);
+void insert(list *l, int value, int ind) {
+    dnode *new = init_dnode(value);
     dnode **p = &l->head; //указатель на указатель на голову
-    dnode *prev = NULL;
-    for (int i = 0; i < ind; i++) {
-        if (i != ind - 2) {
-            prev = (*p);
-        }
+    for (int i = 0; i < ind - 1; i++) {
         p = &((*p)->next);
     }
-    new->next = (*p);
-    if ((*p) != NULL) {
-        prev = (*p)->previous;
-        (*p)->previous = new;
-
+    if (*p == NULL) {
+        *p = new;
+    } else if ((*p)->next == NULL) {
+        (*p)->next = new;
+        new->previous = (*p);
+    } else {
+        new->next = (*p)->next;
+        (*p)->next = new;
+        new->previous = (*p);
+        new->next->previous = new;
     }
-    new->previous = prev;
-    *p = new;
 }
 
 list copy_list(list *l) {
     list new_list = init_list();
     dnode *tmp = l->head;
     dnode **last = &new_list.head;
+    dnode *prev = NULL;
     while (tmp != NULL) {
         dnode *new = init_dnode(tmp->value);
-        new->previous = tmp->previous;
+        new->previous = prev;
+        prev = new;
         (*last) = new;
         last = &(*last)->next;
         tmp = tmp->next;
@@ -59,16 +60,20 @@ list copy_list(list *l) {
     return new_list;
 }
 
-void del(list *l, dnode *node) {
-    if (l->head == node) {
-        l->head = NULL;
+void del(list *l, dnode *target) {
+    if (l->head == NULL || target == NULL) {
         return;
     }
-    dnode **prev = &node->previous;
-    dnode **next = &node->next;
-    (*prev)->next = (*next);
-    (*next)->previous = (*prev);
-    free(node);
+    if (l->head == target) {
+        l->head = target->next;
+    }
+    if (target->next != NULL) {
+        target->next->previous = target->previous;
+    }
+    if (target->previous != NULL) {
+        target->previous->next = target->next;
+    }
+    free(target);
 }
 
 void print_list(list l) {
@@ -105,13 +110,14 @@ int main() {
     for (int i = 0; i < 15; i++) {
         insert(&l, i, i);
     }
-    //print_list(l);
-    insert(&l, 100000, 5);
-    //print_list(l);
-    //back_print(l);
-    list new = copy_list(&l);
-    dnode *p = get_i(&l, 5);
-    del(&new, p);
-    print_list(new);
-    back_print(new);
+    list new_list = copy_list(&l);
+    print_list(new_list);
+    back_print(new_list);
+    insert(&new_list, 1000, 5);
+    print_list(new_list);
+    back_print(new_list);
+    dnode *target = get_i(&new_list, 5);
+    del(&new_list, target);
+    print_list(new_list);
+    back_print(new_list);
 }
