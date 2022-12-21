@@ -19,10 +19,10 @@ dnode *init_dnode(int value) {
     return new;
 }
 
-list init_list() {
+list *init_list() {
     list *new_list = (list *) malloc(sizeof(list));
     new_list->head = NULL;
-    return *new_list;
+    return new_list;
 }
 
 void insert(list *l, int value, int ind) {
@@ -44,10 +44,10 @@ void insert(list *l, int value, int ind) {
     }
 }
 
-list copy_list(list *l) {
-    list new_list = init_list();
+list *copy_list(list *l) {
+    list *new_list = init_list();
     dnode *tmp = l->head;
-    dnode **last = &new_list.head;
+    dnode **last = &new_list->head;
     dnode *prev = NULL;
     while (tmp != NULL) {
         dnode *new = init_dnode(tmp->value);
@@ -106,18 +106,18 @@ dnode *get_i(list *l, int ind) {
 }
 
 int main() {
-    list l = init_list();
+    list *l = init_list();
     for (int i = 0; i < 15; i++) {
-        insert(&l, i, i);
+        insert(l, i, i);
     }
-    list new_list = copy_list(&l);
-    print_list(new_list);
-    back_print(new_list);
-    insert(&new_list, 1000, 5);
-    print_list(new_list);
-    back_print(new_list);
-    dnode *target = get_i(&new_list, 5);
-    del(&new_list, target);
-    print_list(new_list);
-    back_print(new_list);
+    list *new_list = copy_list(l);
+    print_list(*new_list);
+    back_print(*new_list);
+    insert(new_list, 1000, 5);
+    print_list(*new_list);
+    back_print(*new_list);
+    dnode *target = get_i(new_list, 5);
+    del(new_list, target);
+    print_list(*new_list);
+    back_print(*new_list);
 }

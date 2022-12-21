@@ -43,6 +43,19 @@ void insert(list *l, int d, int ind) {
     *p = new;
 }
 
+void append(list *l, int d) {
+    node *new = init_node(d);
+    node **p = &l->head;
+    if (*p == NULL) {
+        *p = new;
+        return;
+    }
+    while ((*p)->next != NULL) {
+        p = &((*p)->next);
+    }
+    (*p)->next = new;
+}
+
 list copy_list(list *l) {
     list new_list = init_list();
     node *tmp = l->head;
@@ -185,17 +198,4 @@ void print_list(list l) {
 
 _Bool check(int i) {
     return i % 2 == 0;
-}
-
-int main() {
-    list l1 = init_list();
-    for (int i = 0, ind = 0; i <= 16; i += 2, ind++) {
-        insert(&l1, i, ind);
-    }
-    list l2 = init_list();
-    for (int i = 1, ind = 0; i <= 16; i += 2, ind++) {
-        insert(&l2, i, ind);
-    }
-    list ans = merge(&l1, &l2);
-    print_list(ans);
 }
